@@ -68,15 +68,11 @@ async function main() {
   await writeLastPost(newestPost);
 
   // Go through the feed and submit every post that is newer than the last posted one.
-  let foundOlderPost = false;
-  do {
-    const newPost = ownerFeed.shift();
-    const newPostIndexedAt = new Date(newPost.indexedAt);
-    if (newPostIndexedAt <= lastNewestPostIndexedAt) {
-      foundOlderPost = true;
-      continue;
-    }
+  const newPostsFeed = ownerFeed
+    .filter((post) => new Date(post.indexedAt) > lastNewestPostIndexedAt)
+    .reverse();
 
+  for (const newPost of newPostsFeed) {
     const postHash = newPost.uri.split("/").pop();
     const uri = "https://bsky.app/profile/" + userHandle + "/post/" + postHash;
     const postText = newPost.record.text;
@@ -103,7 +99,7 @@ async function main() {
     } else {
       console.error("  Failed to post to Discord", postResponse.statusText);
     }
-  } while (!foundOlderPost && ownerFeed.length > 0);
+  }
 }
 
 /**
