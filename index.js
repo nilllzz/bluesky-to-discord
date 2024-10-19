@@ -77,9 +77,9 @@ async function main() {
       continue;
     }
 
-    const postHash = newestPost.uri.split("/").pop();
+    const postHash = newPost.uri.split("/").pop();
     const uri = "https://bsky.app/profile/" + userHandle + "/post/" + postHash;
-    const postText = newestPost.record.text;
+    const postText = newPost.record.text;
     let messageContent = uri;
     if (postText) {
       messageContent = postText + "\n" + messageContent;
